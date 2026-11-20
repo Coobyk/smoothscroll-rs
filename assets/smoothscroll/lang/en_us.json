@@ -1,0 +1,6 @@
+{
+  "smoothscroll.setting.enabled": "Smooth scrolling",
+  "smoothscroll.setting.enabled.tooltip": "Animate scroll offsets instead of snapping them",
+  "smoothscroll.setting.speed": "Scroll animation speed",
+  "smoothscroll.setting.speed.tooltip": "How fast an eased scroll catches up"
+}

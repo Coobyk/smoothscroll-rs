@@ -1,0 +1,136 @@
+id = "smoothscroll"
+name = "Smooth Scroll"
+version = "1.0.0"
+api = "0.2"
+side = "client"
+capabilities = ["registries"]
+description = "Animates scroll offsets in scrollable UI instead of snapping them"
+
+[native]
+game = "26.3"
+horizon = "f00125f61f794aaa3d4e950d301f353b35b6ee3d"
+mixins = "e59da9094f0c2fdda6c627fe9eff22dec6a906f0"
+
+# Game-side state: the pending wheel delta of the surface that took the last
+# wheel event, eased out over the next frames. Helpers call
+# `crate::game::umbx_smoothscroll::{smoothing, push, push_xy, flushing, frame}`.
+[[native.module]]
+id = "scroll_state"
+file = "crates/horizon-client/src/game.rs"
+name = "umbx_smoothscroll"
+source = "src/scroll.rs"
+
+# Once a frame: ease each pending wheel delta a step closer to done.
+[[native.mixin]]
+id = "frame"
+target = "horizon_client::game::native_hooks::render_frame_pre::Game::native_render_frame_pre"
+kind = "HEAD"
+helper = "src/mixins/frame.rs"
+bindings = [
+  { name = "game", ty = "&mut Game<'_>", value = "&mut *self" },
+  { name = "elapsed", ty = "std::time::Duration", value = "elapsed" },
+]
+
+# Each scrollable screen defers its wheel delta instead of applying it; the
+# frame hook replays the pending delta in eased steps through the same code
+# path (the overwritten body checks `flushing`).
+[[native.mixin]]
+id = "chat"
+target = "horizon_client::game::chat::Game::chat_scroll"
+kind = "OVERWRITE"
+helper = "src/mixins/chat.rs"
+bindings = [
+  { name = "game", ty = "&mut Game<'_>", value = "&mut *self" },
+  { name = "amount", ty = "f32", value = "amount" },
+]
+
+[[native.mixin]]
+id = "options"
+target = "horizon_client::game::options::Game::options_scroll"
+kind = "OVERWRITE"
+helper = "src/mixins/options.rs"
+bindings = [
+  { name = "game", ty = "&mut Game<'_>", value = "&mut *self" },
+  { name = "amount", ty = "f32", value = "amount" },
+]
+
+[[native.mixin]]
+id = "social"
+target = "horizon_client::game::social::Game::social_scroll"
+kind = "OVERWRITE"
+helper = "src/mixins/social.rs"
+bindings = [
+  { name = "game", ty = "&mut Game<'_>", value = "&mut *self" },
+  { name = "delta", ty = "f32", value = "delta" },
+]
+
+[[native.mixin]]
+id = "stats"
+target = "horizon_client::game::stats_screen::Game::stats_scroll"
+kind = "OVERWRITE"
+helper = "src/mixins/stats.rs"
+bindings = [
+  { name = "game", ty = "&mut Game<'_>", value = "&mut *self" },
+  { name = "amount", ty = "f32", value = "amount" },
+]
+
+[[native.mixin]]
+id = "debug_options"
+target = "horizon_client::game::debug_options::Game::debug_options_scroll"
+kind = "OVERWRITE"
+helper = "src/mixins/debug_options.rs"
+bindings = [
+  { name = "game", ty = "&mut Game<'_>", value = "&mut *self" },
+  { name = "delta", ty = "f32", value = "delta" },
+]
+
+[[native.mixin]]
+id = "server_links"
+target = "horizon_client::game::server_links::Game::server_links_scroll"
+kind = "OVERWRITE"
+helper = "src/mixins/server_links.rs"
+bindings = [
+  { name = "game", ty = "&mut Game<'_>", value = "&mut *self" },
+  { name = "delta", ty = "f32", value = "delta" },
+]
+
+[[native.mixin]]
+id = "code_of_conduct"
+target = "horizon_client::game::code_of_conduct::Game::code_of_conduct_scroll"
+kind = "OVERWRITE"
+helper = "src/mixins/code_of_conduct.rs"
+bindings = [
+  { name = "game", ty = "&mut Game<'_>", value = "&mut *self" },
+  { name = "delta", ty = "f32", value = "delta" },
+]
+
+[[native.mixin]]
+id = "advancements"
+target = "horizon_client::game::advancements_screen::Game::advancements_scroll"
+kind = "OVERWRITE"
+helper = "src/mixins/advancements.rs"
+bindings = [
+  { name = "game", ty = "&mut Game<'_>", value = "&mut *self" },
+  { name = "x", ty = "f32", value = "x" },
+  { name = "y", ty = "f32", value = "y" },
+]
+
+[[native.mixin]]
+id = "station"
+target = "horizon_client::game::stations::Game::station_scroll"
+kind = "OVERWRITE"
+helper = "src/mixins/station.rs"
+bindings = [
+  { name = "game", ty = "&mut Game<'_>", value = "&mut *self" },
+  { name = "d", ty = "f32", value = "d" },
+]
+
+[[native.mixin]]
+id = "world_options"
+target = "horizon_client::game::lan_screen::Game::world_options_scroll"
+kind = "OVERWRITE"
+helper = "src/mixins/world_options.rs"
+bindings = [
+  { name = "game", ty = "&mut Game<'_>", value = "&mut *self" },
+  { name = "delta", ty = "f32", value = "delta" },
+]

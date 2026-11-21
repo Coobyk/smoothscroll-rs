@@ -13,7 +13,7 @@ mixins = "e59da9094f0c2fdda6c627fe9eff22dec6a906f0"
 
 # Game-side state: the pending wheel delta of the surface that took the last
 # wheel event, eased out over the next frames. Helpers call
-# `crate::game::umbx_smoothscroll::{smoothing, push, push_xy, flushing, frame}`.
+# `crate::game::umbx_smoothscroll::{smoothing, accept, accept_xy, flushing, frame}`.
 [[native.module]]
 id = "scroll_state"
 file = "crates/horizon-client/src/game.rs"

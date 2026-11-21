@@ -12,8 +12,10 @@ struct Mod;
 impl Hooks for Mod {
     fn register(&self, reg: &mut dyn Registrar, _: &RegistrationContext) {
         for spec in [
-            SettingSpec::toggle("enabled", "smoothscroll.setting.enabled", true),
-            SettingSpec::range("speed", "smoothscroll.setting.speed", 0.25, 4.0, 0.25, 1.0),
+            SettingSpec::toggle("enabled", "smoothscroll.setting.enabled", true)
+                .tooltip("smoothscroll.setting.enabled.tooltip"),
+            SettingSpec::range("speed", "smoothscroll.setting.speed", 0.25, 4.0, 0.25, 1.0)
+                .tooltip("smoothscroll.setting.speed.tooltip"),
         ] {
             let _ = reg.register_setting(spec);
         }

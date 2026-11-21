@@ -19,11 +19,9 @@ pub enum Surface {
     DebugOptions,
     ServerLinks,
     CodeOfConduct,
-    Creative,
     Advancements,
     Station,
     WorldOptions,
-    Title,
 }
 
 std::thread_local! {
@@ -66,7 +64,7 @@ fn queue(surface: Surface) {
 
 /// Queue `delta` for `surface` outright (for helpers that already know the
 /// event scrolls).
-pub fn push(surface: Surface, delta: f32) {
+fn push(surface: Surface, delta: f32) {
     queue(surface);
     PENDING.with(|p| p.set(p.get() + delta));
 }
@@ -105,12 +103,10 @@ fn open(game: &Game<'_>, surface: Surface) -> bool {
         Surface::Stats => game.screen == Screen::Stats,
         Surface::DebugOptions => game.screen == Screen::DebugOptions,
         Surface::ServerLinks => game.screen == Screen::ServerLinks,
-        Surface::Creative => game.screen == Screen::Creative,
         Surface::Advancements => game.screen == Screen::Advancements,
         Surface::Station => game.screen == Screen::Inventory,
         Surface::WorldOptions => game.screen == Screen::WorldOptions,
         Surface::CodeOfConduct => game.code_of_conduct.is_some(),
-        Surface::Title => game.title_input_active(),
     }
 }
 
@@ -193,18 +189,9 @@ pub fn frame(game: &mut Game<'_>, dt: f32) {
             Surface::DebugOptions => game.debug_options_scroll(step),
             Surface::ServerLinks => game.server_links_scroll(step),
             Surface::CodeOfConduct => game.code_of_conduct_scroll(step),
-            Surface::Creative => game
-                .creative_screen
-                .wheel(f64::from(step), &game.pack.names),
             Surface::Advancements => game.advancements_scroll(step_x, step),
             Surface::Station => game.station_scroll(step),
             Surface::WorldOptions => game.world_options_scroll(step),
-            Surface::Title => {
-                let (size, cursor) = (game.gui_size(), game.cursor);
-                if let Some(title) = game.title.as_mut() {
-                    title.scroll_worlds(step, cursor, size);
-                }
-            }
             Surface::Chat => {}
         }
     }

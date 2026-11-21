@@ -30,13 +30,14 @@ whole-line steps, never stalling or overshooting.
 - Debug options list (F3+F6)
 - Server links dialog
 - Code-of-conduct prompt text
-- Creative inventory
 - Advancements screen (both wheel axes)
 - Station screens: loom pattern list and stonecutter recipe list
 - World options / LAN screen: the options scroll and the game-rules list
-- Title screens: classic world list, multiplayer server list, realms list,
-  flat and buffet preset lists, the game-rules overlay, and the missing-mods
-  message list
+
+The creative inventory and the title screens' lists (worlds, servers,
+presets, game rules) are *not* smoothed: their wheel handling lives in
+widgets rather than in the screen scroll functions above, so there is no
+hook point a mixin can queue their delta from.
 
 Whole-notch consumers stay instant and are never fed an eased step:
 cycle buttons on the create-world and LAN screens, Ctrl+wheel GUI-scale
